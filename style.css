@@ -36,13 +36,19 @@ html {
 
 body {
     min-height: 100vh;
+
     background:
         radial-gradient(
-            circle at 50% 20%,
-            rgba(90, 48, 25, 0.08),
-            transparent 40%
+            ellipse 75% 45% at 50% 100%,
+            rgba(112, 36, 10, 0.13),
+            transparent 65%
         ),
-        var(--black);
+        radial-gradient(
+            ellipse 55% 50% at 50% 48%,
+            rgba(53, 48, 43, 0.035),
+            transparent 70%
+        ),
+        #050608;
 
     color: var(--white);
 
@@ -57,63 +63,266 @@ body {
 
 /* =========================================================
    BACKGROUND
-   ========================================================= */
+   Deep atmospheric ember field
+========================================================= */
 
 .background {
     position: fixed;
     inset: 0;
+
     pointer-events: none;
-    z-index: -10;
+
+    z-index: 0;
+
     overflow: hidden;
+
+    background:
+        radial-gradient(
+            ellipse 70% 55% at 50% 105%,
+            rgba(143, 42, 10, 0.055),
+            transparent 70%
+        ),
+        radial-gradient(
+            ellipse 45% 65% at 10% 55%,
+            rgba(52, 48, 44, 0.025),
+            transparent 70%
+        ),
+        radial-gradient(
+            ellipse 45% 65% at 90% 40%,
+            rgba(45, 42, 39, 0.02),
+            transparent 70%
+        );
+
+    transition:
+        background 2s ease;
 }
+
+
+/* =========================================================
+   DISTANT ATMOSPHERE
+========================================================= */
+
+.background::before {
+    content: "";
+
+    position: absolute;
+    inset: -25%;
+
+    background:
+        radial-gradient(
+            ellipse 35% 22% at 22% 35%,
+            rgba(116, 108, 96, 0.025),
+            transparent 75%
+        ),
+        radial-gradient(
+            ellipse 30% 20% at 78% 28%,
+            rgba(101, 94, 84, 0.022),
+            transparent 75%
+        ),
+        radial-gradient(
+            ellipse 45% 28% at 50% 75%,
+            rgba(117, 49, 20, 0.022),
+            transparent 75%
+        );
+
+    filter: blur(35px);
+
+    animation:
+        atmosphere-drift 22s ease-in-out infinite alternate;
+}
+
+
+@keyframes atmosphere-drift {
+
+    0% {
+        transform:
+            translate3d(-1.5%, 1%, 0)
+            scale(1);
+    }
+
+    50% {
+        transform:
+            translate3d(1%, -1%, 0)
+            scale(1.035);
+    }
+
+    100% {
+        transform:
+            translate3d(2%, 1.5%, 0)
+            scale(1.07);
+    }
+}
+
+
+/* =========================================================
+   SLOW SMOKE
+========================================================= */
+
+.background::after {
+    content: "";
+
+    position: absolute;
+
+    width: 160%;
+    height: 80%;
+
+    left: -30%;
+    top: 10%;
+
+    background:
+        radial-gradient(
+            ellipse at 20% 45%,
+            rgba(115, 109, 101, 0.014),
+            transparent 32%
+        ),
+        radial-gradient(
+            ellipse at 55% 30%,
+            rgba(100, 95, 89, 0.018),
+            transparent 38%
+        ),
+        radial-gradient(
+            ellipse at 82% 60%,
+            rgba(80, 76, 70, 0.015),
+            transparent 34%
+        );
+
+    filter: blur(55px);
+
+    opacity: 0.85;
+
+    animation:
+        smoke-movement 30s ease-in-out infinite alternate;
+}
+
+
+@keyframes smoke-movement {
+
+    0% {
+        transform:
+            translate3d(-4%, 3%, 0)
+            scale(1);
+    }
+
+    35% {
+        transform:
+            translate3d(1%, -2%, 0)
+            scale(1.04);
+    }
+
+    70% {
+        transform:
+            translate3d(4%, 2%, 0)
+            scale(1.07);
+    }
+
+    100% {
+        transform:
+            translate3d(-1%, -3%, 0)
+            scale(1.1);
+    }
+}
+
+
+/* =========================================================
+   DISTANT EMBER FIELD
+   This is the big atmospheric warmth underneath everything.
+========================================================= */
 
 .glow {
     position: absolute;
 
-    width: 45vw;
-    height: 45vw;
-
-    max-width: 500px;
-    max-height: 500px;
+    width: min(750px, 150vw);
+    height: min(750px, 150vw);
 
     left: 50%;
-    top: 50%;
+    top: 100%;
 
-    transform: translate(-50%, -50%);
+    transform:
+        translate(-50%, -50%)
+        scale(0.8);
 
     border-radius: 50%;
 
     background:
         radial-gradient(
             circle,
-            rgba(255, 111, 36, 0.10),
-            rgba(255, 70, 20, 0.03) 35%,
-            transparent 70%
+            rgba(255, 104, 35, 0.07) 0%,
+            rgba(190, 60, 20, 0.035) 18%,
+            rgba(130, 38, 13, 0.018) 38%,
+            transparent 68%
         );
 
-    filter: blur(25px);
+    filter: blur(10px);
 
-    opacity: 0;
+    opacity: 0.4;
 
     transition:
-        opacity 2s ease,
-        transform 2s ease;
-}
-
-body.awake .glow {
-    opacity: 1;
+        opacity 2.5s ease,
+        transform 3s ease;
 }
 
 
 /* =========================================================
-   ASH PARTICLES
-   ========================================================= */
+   WARMTH BUILDS THROUGH THE POEM
+========================================================= */
+
+body.poem-active .glow {
+    opacity:
+        calc(0.4 + (var(--scroll-warmth, 0) * 5));
+
+    transform:
+        translate(-50%, -50%)
+        scale(calc(0.8 + (var(--scroll-warmth, 0) * 5)));
+}
+
+
+/* =========================================================
+   SECONDARY WARM HAZE
+========================================================= */
+
+body.poem-active .background {
+    background:
+        radial-gradient(
+            ellipse 75% 55% at 50% 105%,
+            rgba(
+                155,
+                47,
+                12,
+                calc(0.055 + (var(--scroll-warmth, 0) * 1.3))
+            ),
+            transparent 70%
+        ),
+        radial-gradient(
+            ellipse 50% 60% at 15% 60%,
+            rgba(62, 53, 46, 0.025),
+            transparent 70%
+        ),
+        radial-gradient(
+            ellipse 50% 60% at 85% 40%,
+            rgba(57, 49, 43, 0.022),
+            transparent 70%
+        );
+}
+
+
+/* =========================================================
+   ASH FIELD
+========================================================= */
 
 .ash-field {
     position: absolute;
+
     inset: 0;
+
     overflow: hidden;
+
+    opacity: 0.75;
 }
+
+
+/* =========================================================
+   INDIVIDUAL PARTICLES
+========================================================= */
 
 .ash {
     position: absolute;
@@ -121,44 +330,386 @@ body.awake .glow {
     width: 2px;
     height: 2px;
 
-    background: rgba(180, 180, 180, 0.4);
-
     border-radius: 50%;
 
-    animation:
-        ashFloat linear infinite;
+    background:
+        rgba(181, 176, 167, 0.3);
+
+    box-shadow:
+        0 0 2px rgba(210, 204, 194, 0.08);
 
     opacity: 0;
+
+    animation:
+        ash-float linear infinite;
 }
 
-body.awake .ash {
-    opacity: 1;
+
+/* =========================================================
+   MOST ASH = COLD / GREY
+========================================================= */
+
+.ash:nth-child(2n) {
+    width: 1px;
+    height: 1px;
+
+    background:
+        rgba(180, 176, 169, 0.24);
 }
 
-@keyframes ashFloat {
+
+/* =========================================================
+   SOME ASH = SLIGHTLY VISIBLE
+========================================================= */
+
+.ash:nth-child(3n) {
+    width: 2px;
+    height: 2px;
+
+    background:
+        rgba(190, 184, 174, 0.32);
+}
+
+
+/* =========================================================
+   TINY WARM EMBERS
+   Not every particle is orange — just enough to notice.
+========================================================= */
+
+.ash:nth-child(7n) {
+    width: 2px;
+    height: 2px;
+
+    background:
+        rgba(211, 91, 38, 0.5);
+
+    box-shadow:
+        0 0 5px rgba(230, 89, 32, 0.25);
+
+    animation-name:
+        ember-drift;
+}
+
+
+/* =========================================================
+   RARE HOT EMBERS
+========================================================= */
+
+.ash:nth-child(13n) {
+    width: 2px;
+    height: 2px;
+
+    background:
+        rgba(255, 147, 73, 0.72);
+
+    box-shadow:
+        0 0 6px rgba(255, 116, 43, 0.4),
+        0 0 12px rgba(255, 85, 25, 0.15);
+
+    animation-name:
+        ember-drift-hot;
+}
+
+
+/* =========================================================
+   ASH FLOAT
+========================================================= */
+
+@keyframes ash-float {
 
     0% {
         transform:
-            translate3d(0, 105vh, 0)
+            translate3d(0, 110vh, 0)
             rotate(0deg);
 
         opacity: 0;
     }
 
-    10% {
-        opacity: 0.5;
+    8% {
+        opacity: 0.22;
     }
 
-    80% {
-        opacity: 0.25;
+    25% {
+        transform:
+            translate3d(22px, 82vh, 0)
+            rotate(80deg);
+    }
+
+    50% {
+        transform:
+            translate3d(-28px, 52vh, 0)
+            rotate(180deg);
+
+        opacity: 0.28;
+    }
+
+    72% {
+        transform:
+            translate3d(35px, 28vh, 0)
+            rotate(270deg);
+
+        opacity: 0.16;
+    }
+
+    90% {
+        opacity: 0.05;
     }
 
     100% {
         transform:
-            translate3d(var(--drift), -10vh, 0)
-            rotate(180deg);
+            translate3d(-50px, -12vh, 0)
+            rotate(360deg);
 
         opacity: 0;
+    }
+}
+
+
+/* =========================================================
+   WARM EMBER DRIFT
+========================================================= */
+
+@keyframes ember-drift {
+
+    0% {
+        transform:
+            translate3d(0, 110vh, 0)
+            scale(0.65);
+
+        opacity: 0;
+    }
+
+    12% {
+        opacity: 0.45;
+    }
+
+    35% {
+        transform:
+            translate3d(-22px, 72vh, 0)
+            scale(0.9);
+    }
+
+    58% {
+        transform:
+            translate3d(28px, 45vh, 0)
+            scale(1.05);
+
+        opacity: 0.55;
+    }
+
+    78% {
+        transform:
+            translate3d(-12px, 20vh, 0)
+            scale(0.8);
+
+        opacity: 0.22;
+    }
+
+    100% {
+        transform:
+            translate3d(35px, -12vh, 0)
+            scale(0.5);
+
+        opacity: 0;
+    }
+}
+
+
+/* =========================================================
+   HOT EMBER DRIFT
+   Rare, slower, brighter sparks.
+========================================================= */
+
+@keyframes ember-drift-hot {
+
+    0% {
+        transform:
+            translate3d(0, 108vh, 0)
+            scale(0.5);
+
+        opacity: 0;
+    }
+
+    15% {
+        opacity: 0.55;
+    }
+
+    32% {
+        transform:
+            translate3d(35px, 75vh, 0)
+            scale(1);
+    }
+
+    50% {
+        transform:
+            translate3d(-30px, 52vh, 0)
+            scale(1.15);
+
+        opacity: 0.7;
+    }
+
+    70% {
+        transform:
+            translate3d(20px, 28vh, 0)
+            scale(0.85);
+
+        opacity: 0.35;
+    }
+
+    100% {
+        transform:
+            translate3d(-25px, -8vh, 0)
+            scale(0.35);
+
+        opacity: 0;
+    }
+}
+
+
+/* =========================================================
+   PARTICLE TIMING
+========================================================= */
+
+.ash:nth-child(2n) {
+    animation-duration: 18s;
+}
+
+.ash:nth-child(3n) {
+    animation-duration: 23s;
+}
+
+.ash:nth-child(4n) {
+    animation-duration: 28s;
+}
+
+.ash:nth-child(5n) {
+    animation-duration: 20s;
+}
+
+.ash:nth-child(6n) {
+    animation-duration: 25s;
+}
+
+.ash:nth-child(7n) {
+    animation-duration: 19s;
+}
+
+.ash:nth-child(8n) {
+    animation-duration: 30s;
+}
+
+.ash:nth-child(11n) {
+    animation-duration: 26s;
+}
+
+.ash:nth-child(13n) {
+    animation-duration: 24s;
+}
+
+
+/* =========================================================
+   SUBTLE SIDE HAZE
+========================================================= */
+
+body.poem-active::before {
+    content: "";
+
+    position: fixed;
+    inset: 0;
+
+    pointer-events: none;
+
+    z-index: 1;
+
+    background:
+        radial-gradient(
+            ellipse at 0% 50%,
+            rgba(85, 74, 63, 0.025),
+            transparent 35%
+        ),
+        radial-gradient(
+            ellipse at 100% 50%,
+            rgba(85, 72, 60, 0.02),
+            transparent 35%
+        );
+
+    opacity: 0.8;
+}
+
+
+/* =========================================================
+   DEEP VIGNETTE
+========================================================= */
+
+body::after {
+    content: "";
+
+    position: fixed;
+    inset: 0;
+
+    pointer-events: none;
+
+    z-index: 50;
+
+    background:
+        radial-gradient(
+            ellipse at center,
+            transparent 38%,
+            rgba(0, 0, 0, 0.12) 72%,
+            rgba(0, 0, 0, 0.28) 100%
+        );
+
+    opacity: 0.75;
+}
+
+
+/* =========================================================
+   MOBILE BACKGROUND
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .glow {
+        width: 500px;
+        height: 500px;
+
+        top: 102%;
+    }
+
+    .background::before {
+        inset: -35%;
+
+        filter: blur(28px);
+    }
+
+    .background::after {
+        width: 190%;
+        height: 85%;
+
+        left: -45%;
+        top: 8%;
+
+        filter: blur(40px);
+    }
+
+    .ash {
+        width: 1.5px;
+        height: 1.5px;
+    }
+
+    .ash:nth-child(3n) {
+        width: 1.5px;
+        height: 1.5px;
+    }
+
+    .ash:nth-child(7n) {
+        width: 1.5px;
+        height: 1.5px;
+    }
+
+    .ash:nth-child(13n) {
+        width: 2px;
+        height: 2px;
     }
 }
 
@@ -604,6 +1155,7 @@ body.awake .ash {
 
 
 /* Slightly brighter lines */
+
 .stanza:nth-child(7) p,
 .stanza:nth-child(10) p,
 .stanza:nth-child(13) p {
@@ -1018,6 +1570,13 @@ body.awake .ash {
     .stanza {
         opacity: 1;
         transform: none;
+    }
+
+    .background::before,
+    .background::after,
+    .ash,
+    .glow {
+        animation: none !important;
     }
 
 }
